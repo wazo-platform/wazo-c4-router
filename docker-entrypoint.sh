@@ -1,10 +1,12 @@
 #!/bin/sh
 date
 
-mkdir -p /etc/kamailio/
+mkdir -p /etc/kamailio/ /etc/kamailio/dbtext
+
 echo '#!define RTPENGINE_LIST "'$RTPENGINE_LIST'"' > /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_ROUTING_ENDPOINT "'$HTTP_API_ROUTING_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_CDR_ENDPOINT "'$HTTP_API_CDR_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
+echo '#!define HTTP_API_DBTEXT_UACREG_ENDPOINT "'$HTTP_API_DBTEXT_UACREG_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_TIMEOUT '$HTTP_API_TIMEOUT >> /etc/kamailio/kamailio-local.cfg
 echo '#!define LISTEN '$LISTEN >> /etc/kamailio/kamailio-local.cfg
 
