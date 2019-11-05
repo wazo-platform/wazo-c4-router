@@ -18,6 +18,9 @@ if ! [ -z "$WITH_DMQ" ]; then
     echo '#!define DMQ_SERVER_ADDRESS "sip:'$IP_ADDRESS':'$DMQ_PORT'"' >> /etc/kamailio/kamailio-local.cfg
     echo '#!define DMQ_NOTIFICATION_ADDRESS "'$DMQ_NOTIFICATION_ADDRESS'"' >> /etc/kamailio/kamailio-local.cfg
 fi
+if ! [ -z "$ROUTER_AUTH_SECRET" ]; then
+    echo '#!define ROUTER_AUTH_SECRET "'$ROUTER_AUTH_SECRET'"' >> /etc/kamailio/kamailio-local.cfg
+fi
 
 #--- KAMAILIO ---#
 export PATH_KAMAILIO_CFG=/etc/kamailio/kamailio.cfg
