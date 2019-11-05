@@ -1,6 +1,8 @@
 #!/bin/sh
 date
 
+IP_ADDRESS=$(hostname -i)
+
 mkdir -p /etc/kamailio/ /etc/kamailio/dbtext
 
 echo '#!define RTPENGINE_LIST "'$RTPENGINE_LIST'"' > /etc/kamailio/kamailio-local.cfg
@@ -9,6 +11,13 @@ echo '#!define HTTP_API_CDR_ENDPOINT "'$HTTP_API_CDR_ENDPOINT'"' >> /etc/kamaili
 echo '#!define HTTP_API_DBTEXT_UACREG_ENDPOINT "'$HTTP_API_DBTEXT_UACREG_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_TIMEOUT '$HTTP_API_TIMEOUT >> /etc/kamailio/kamailio-local.cfg
 echo '#!define LISTEN '$LISTEN >> /etc/kamailio/kamailio-local.cfg
+if ! [ -z "$WITH_DMQ" ]; then
+    echo '#!define WITH_DMQ 1' >> /etc/kamailio/kamailio-local.cfg
+    echo '#!define DMQ_PORT "'$DMQ_PORT'"' >> /etc/kamailio/kamailio-local.cfg
+    echo '#!define DMQ_LISTEN '$DMQ_LISTEN >> /etc/kamailio/kamailio-local.cfg
+    echo '#!define DMQ_SERVER_ADDRESS "sip:'$IP_ADDRESS':'$DMQ_PORT'"' >> /etc/kamailio/kamailio-local.cfg
+    echo '#!define DMQ_NOTIFICATION_ADDRESS "'$DMQ_NOTIFICATION_ADDRESS'"' >> /etc/kamailio/kamailio-local.cfg
+fi
 
 #--- KAMAILIO ---#
 export PATH_KAMAILIO_CFG=/etc/kamailio/kamailio.cfg
