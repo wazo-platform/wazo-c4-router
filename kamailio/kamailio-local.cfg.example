@@ -26,3 +26,6 @@
 
 /* DB url for UAC registration */
 # #!define REG_DB_URL "text:///etc/kamailio/dbtext"
+
+/* DB url for domain module */
+# #!define DOMAIN_DB_URL "text:///etc/kamailio/dbtext"

@@ -27,7 +27,10 @@ COPY kamailio/kamailio.cfg /etc/kamailio/kamailio.cfg
 COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
 COPY kamailio/xhttp.cfg /etc/kamailio/xhttp.cfg
+COPY kamailio/dbtext/domain /etc/kamailio/dbtext/domain
+COPY kamailio/dbtext/domain_attrs /etc/kamailio/dbtext/domain_attrs
 COPY kamailio/dbtext/uacreg /etc/kamailio/dbtext/uacreg
+COPY kamailio/dbtext/version /etc/kamailio/dbtext/version
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
