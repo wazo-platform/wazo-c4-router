@@ -16,6 +16,7 @@ RUN apk add --update \
     kamailio-extras \
     kamailio-outbound \
     kamailio-http_async \
+    kamailio-dbtext \
     kamailio-ev
 
 COPY ./scripts/wait-for /usr/bin/wait-for
