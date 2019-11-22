@@ -4,6 +4,7 @@ ENV VERSION 1.0.0
 
 RUN apk add --update \
     bash \
+    supervisor \
     sngrep \
     curl \
     netcat-openbsd \
@@ -19,6 +20,9 @@ RUN apk add --update \
     kamailio-dbtext \
     kamailio-ev
 
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+RUN apk add --update consul-template && rm -rf /var/lib/apt/lists/*
+
 COPY ./scripts/wait-for /usr/bin/wait-for
 RUN chmod +x /usr/bin/wait-for
 
@@ -30,8 +34,11 @@ COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
 COPY kamailio/xhttp.cfg /etc/kamailio/xhttp.cfg
 COPY kamailio/dbtext/domain /etc/kamailio/dbtext/domain
 COPY kamailio/dbtext/domain_attrs /etc/kamailio/dbtext/domain_attrs
+COPY kamailio/dbtext/rtpengine /etc/kamailio/dbtext/rtpengine
 COPY kamailio/dbtext/uacreg /etc/kamailio/dbtext/uacreg
 COPY kamailio/dbtext/version /etc/kamailio/dbtext/version
+COPY consul-templates /consul-templates
+COPY supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh

@@ -3,6 +3,8 @@ date
 
 HOSTNAME=$(hostname)
 IP_ADDRESS=$(hostname -i)
+export PATH_KAMAILIO_CFG=/etc/kamailio/kamailio.cfg
+export KAMAILIO=$(which kamailio)
 
 mkdir -p /etc/kamailio/ /etc/kamailio/dbtext
 
@@ -32,18 +34,13 @@ if ! [ -z "$ROUTER_AUTH_SECRET" ]; then
     echo '#!define ROUTER_AUTH_SECRET "'$ROUTER_AUTH_SECRET'"' >> /etc/kamailio/kamailio-local.cfg
 fi
 
-if ! [ -z "$WITH_CONSUL" ]; then
-    curl -X PUT \
-    -d '{"ID": "'$HOSTNAME'", "Name": "router", "Tags": [ "router", "kamailio" ], "Address": "'$IP_ADDRESS'", "Port": '$PORT'}' \
-    $CONSUL_URI:$CONSUL_PORT/v1/agent/service/register
-fi
-
-#--- KAMAILIO ---#
-export PATH_KAMAILIO_CFG=/etc/kamailio/kamailio.cfg
-kamailio=$(which kamailio)
-
 # Test the config syntax
-$kamailio -f $PATH_KAMAILIO_CFG -c
+$KAMAILIO -f $PATH_KAMAILIO_CFG -c
+
+curl -X PUT \
+    -d '{"ID": "'$HOSTNAME'", "Name": "router", "Tags": [ "router", "kamailio" ], "Address": "'$IP_ADDRESS'", "Port": '$SIP_PORT'}' \
+    http://consul:8500/v1/agent/service/register
 
 # Run
-$kamailio -m "${SHM_MEM}" -M "${PKG_MEM}" -f $PATH_KAMAILIO_CFG -DD -E -e
+supervisord=$(which supervisord)
+$supervisord -n -c /etc/supervisor/conf.d/supervisord.conf
