@@ -1,8 +1,12 @@
 #!/bin/sh
 date
-wait-for -t 60 $ROUTER_CONFD_URI
-wait-for -t 60 $CONSUL_URI
-sleep 2
+if ! [ -z "$ROUTER_CONFD_URI" ]; then
+    wait-for -t 60 $ROUTER_CONFD_URI
+fi
+if ! [ -z "$CONSUL_URI" ]; then
+    wait-for -t 60 $CONSUL_URI
+    sleep 2
+fi
 
 HOSTNAME=$(hostname)
 IP_ADDRESS=$(hostname -i)

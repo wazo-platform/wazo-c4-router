@@ -19,7 +19,8 @@ RUN true \
         kamailio-extras \
         kamailio-outbound \
         kamailio-http_async \
-        kamailio-ev
+        kamailio-ev \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN true \
     && echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
