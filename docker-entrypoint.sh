@@ -2,7 +2,7 @@
 date
 wait-for -t 60 $ROUTER_CONFD_URI
 wait-for -t 60 $CONSUL_URI
-sleep2
+sleep 2
 
 HOSTNAME=$(hostname)
 IP_ADDRESS=$(hostname -i)
