@@ -49,7 +49,16 @@ curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
     "Name": "router",
     "Tags": ["router", "kamailio"],
     "Address": "'$IP_ADDRESS'",
-    "Port": '$SIP_PORT'
+    "Port": '$SIP_PORT',
+    "Check": {
+        "ID": "XHTTP",
+        "Name": "XHTTP API on port 8000",
+        "DeregisterCriticalServiceAfter": "10m",
+        "Method": "GET",
+        "HTTP": "http://'$IP_ADDRESS':8000/status",
+        "Timeout": "1s",
+        "Interval": "10s"
+    }
 }'
 exit_script() {
     curl -X PUT http://${CONSUL_URI}/v1/agent/service/deregister/$HOSTNAME
