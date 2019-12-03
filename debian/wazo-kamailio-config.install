@@ -1,3 +1,0 @@
-kamailio/kamailio.cfg usr/share/wazo-c4-router
-kamailio/routing.cfg usr/share/wazo-c4-router
-kamailio/cdrs.cfg usr/share/wazo-c4-router
