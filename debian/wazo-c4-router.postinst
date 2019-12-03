@@ -4,7 +4,7 @@ set -e
 
 case "$1" in
     configure)
-        mkdir -p /etc/kamailio/wazo-c4-router /etc/kamailio/wazo-c4-router/dbtext
+        mkdir -p /etc/kamailio /etc/kamailio/dbtext
         cp /usr/share/wazo-c4-router/*.cfg /etc/kamailio/
         cp /usr/share/wazo-c4-router/*.cfg.example /etc/kamailio/
         cp /usr/share/wazo-c4-router/dbtext/* /etc/kamailio/dbtext/
