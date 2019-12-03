@@ -9,10 +9,10 @@ RUN true \
         sipsak \
         sngrep \
         curl \
-        kamailio-dbtext \
         netcat-openbsd \
         kamailio \
         kamailio-db \
+        kamailio-dbtext \
         kamailio-jansson \
         kamailio-json \
         kamailio-utils \
@@ -38,11 +38,7 @@ COPY kamailio/kamailio.cfg /etc/kamailio/kamailio.cfg
 COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
 COPY kamailio/xhttp.cfg /etc/kamailio/xhttp.cfg
-COPY kamailio/dbtext/domain /etc/kamailio/dbtext/domain
-COPY kamailio/dbtext/domain_attrs /etc/kamailio/dbtext/domain_attrs
-COPY kamailio/dbtext/rtpengine /etc/kamailio/dbtext/rtpengine
-COPY kamailio/dbtext/uacreg /etc/kamailio/dbtext/uacreg
-COPY kamailio/dbtext/version /etc/kamailio/dbtext/version
+COPY kamailio/dbtext /etc/kamailio/dbtext
 COPY consul-templates /consul-templates
 COPY supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
