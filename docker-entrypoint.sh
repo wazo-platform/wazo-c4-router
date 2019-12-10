@@ -39,6 +39,9 @@ echo '#!define LISTEN '$LISTEN >> /etc/kamailio/kamailio-local.cfg
 if ! [ -z "$TESTING" ]; then
     echo '#!define TESTING 1' >> /etc/kamailio/kamailio-local.cfg
 fi
+if ! [ -z "$HTTP_ASYNC_CLIENT_WORKERS" ]; then
+    echo '#!define HTTP_ASYNC_CLIENT_WORKERS '$HTTP_ASYNC_CLIENT_WORKERS  >> /etc/kamailio/kamailio-local.cfg
+fi
 if ! [ -z "$LISTEN_ADVERTISE" ]; then
     echo '#!define LISTEN_ADVERTISE '$LISTEN_ADVERTISE >> /etc/kamailio/kamailio-local.cfg
 fi
