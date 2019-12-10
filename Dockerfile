@@ -13,6 +13,7 @@ bash \
 supervisor \
 sipsak \
 sngrep \
+inetutils-ping \
 net-tools \
 sip-tester \
 curl \
