@@ -7,9 +7,21 @@ if ! [ -z "$CONSUL_URI" ]; then
     wait-for -t 60 $CONSUL_URI
     sleep 2
 fi
+if ! [ -z "$REDIS_URI" ]; then
+    wait-for -t 60 $REDIS_URI
+    sleep 2
+fi
 
 if [ -z "$INTERFACE_SIP" ]; then
     INTERFACE_SIP="eth0"
+fi
+if [ -z "$DISPATCHER_WEIGHT" ]; then
+    DISPATCHER_WEIGHT="5"
+fi
+if [ "$DISPATCHER_WEIGHT" -gt "5" ]; then
+    DISPATCHER_ORDER="primary"
+else
+    DISPATCHER_ORDER="secondary"
 fi
 if [ -z "$INTERFACE_DMQ" ]; then
     INTERFACE_DMQ="$INTERFACE_SIP"
@@ -55,6 +67,12 @@ if ! [ -z "$WITH_DMQ" ]; then
     echo '#!define DMQ_SERVER_ADDRESS "sip:'$DMQ_IP':'$DMQ_PORT'"' >> /etc/kamailio/kamailio-local.cfg
     echo '#!define DMQ_NOTIFICATION_ADDRESS "'$DMQ_NOTIFICATION_ADDRESS'"' >> /etc/kamailio/kamailio-local.cfg
 fi
+if ! [ -z "$WITH_REDIS_DIALOG" ]; then
+    echo '#!define WITH_REDIS_DIALOG 1' >> /etc/kamailio/kamailio-local.cfg
+fi
+if ! [ -z "$DBURL_DIALOG" ]; then
+    echo '#!define DBURL_DIALOG "'$DBURL_DIALOG'"' >> /etc/kamailio/kamailio-local.cfg
+fi
 if ! [ -z "$ROUTER_AUTH_SECRET" ]; then
     echo '#!define ROUTER_AUTH_SECRET "'$ROUTER_AUTH_SECRET'"' >> /etc/kamailio/kamailio-local.cfg
 fi
@@ -66,7 +84,7 @@ $KAMAILIO -f $KAMAILIO_CONF -c
 curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
     "ID": "'$HOSTNAME'",
     "Name": "router",
-    "Tags": ["router", "kamailio"],
+    "Tags": ["router", "kamailio", "'$DISPATCHER_ORDER'"],
     "Address": "'$SIP_IP'",
     "Port": '$SIP_PORT',
     "Check": {
@@ -77,6 +95,10 @@ curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
         "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
         "Timeout": "1s",
         "Interval": "10s"
+    },
+    "Weights": {
+      "Passing": '$DISPATCHER_WEIGHT',
+      "Warning": 1
     }
 }'
 exit_script() {
