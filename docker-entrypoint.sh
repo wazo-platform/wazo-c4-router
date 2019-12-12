@@ -1,5 +1,7 @@
 #!/bin/sh
 date
+
+# Wait For
 if ! [ -z "$ROUTER_CONFD_URI" ]; then
     wait-for -t 60 $ROUTER_CONFD_URI
 fi
@@ -12,6 +14,7 @@ if ! [ -z "$REDIS_URI" ]; then
     sleep 2
 fi
 
+# Interfaces and IPs
 if [ -z "$INTERFACE_SIP" ]; then
     INTERFACE_SIP="eth0"
 fi
@@ -40,8 +43,8 @@ fi
 HOSTNAME=$(hostname)
 export KAMAILIO=$(which kamailio)
 
+# Kamailio-local.cfg
 mkdir -p /etc/kamailio/ /etc/kamailio/dbtext
-
 echo '#!define LISTEN_XHTTP tcp:'$INTERFACE_XHTTP':'$XHTTP_PORT > /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_ROUTING_ENDPOINT "'$HTTP_API_ROUTING_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_CDR_ENDPOINT "'$HTTP_API_CDR_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
