@@ -1,5 +1,7 @@
 # *** Value defines - IDs used later in config
 
+#!define IS_SBC 1
+
 /* API endpoints */
 # #!define HTTP_API_ROUTING_ENDPOINT "http://wazo-router-confd:9600/1.0/kamailio/routing"
 # #!define HTTP_API_CDR_ENDPOINT "http://wazo-router-confd:9600/1.0/kamailio/cdr"
@@ -16,7 +18,7 @@
 
 /* add listen protocol, address and port / advertise (optional) */
 # #!define LISTEN udp:192.168.1.1:5060 advertise c4.wazo.community
-# #!define LISTEN_XHTTP tcp:lo:9600
+# #!define LISTEN_XHTTP tcp:lo:8000
 
 /* Address to be used to build contact address when registering to carriers */
 # #!define REG_CONTACT_ADDRESS localhost:5060

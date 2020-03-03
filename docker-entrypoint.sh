@@ -1,6 +1,12 @@
 #!/bin/sh
 date
 
+# Determine SIP server type (SBC, ROUTER or AIO)
+# AIO by default
+if ! [ -z "$SIP_SERVER_TYPE" ]; then
+    SIP_SERVER_TYPE='AIO'
+fi
+
 # Wait For
 if ! [ -z "$ROUTER_CONFD_URI" ]; then
     wait-for -t 60 $ROUTER_CONFD_URI
@@ -37,7 +43,7 @@ DMQ_IP=$(ip -o -4 a | awk '$2 == "'$INTERFACE_DMQ'" { gsub(/\/.*/, "", $4); prin
 XHTTP_IP=$(ip -o -4 a | awk '$2 == "'$INTERFACE_XHTTP'" { gsub(/\/.*/, "", $4); print $4 }')
 
 if [ -z "$XHTTP_PORT" ]; then
-    XHTTP_PORT="8000"
+    XHTTP_PORT="9600"
 fi
 
 HOSTNAME=$(hostname)
@@ -45,6 +51,16 @@ export KAMAILIO=$(which kamailio)
 
 # Kamailio-local.cfg
 mkdir -p /etc/kamailio/ /etc/kamailio/dbtext
+if [ "$SIP_SERVER_TYPE" = "AIO"]; then
+    echo '#!define IS_AIO 1' > /etc/kamailio/kamailio-local.cfg
+    echo '#!define ISNOT_SBC 1' > /etc/kamailio/kamailio-local.cfg
+elif [ "$SIP_SERVER_TYPE" = "SBC"]; then
+    echo '#!define IS_SBC 1' > /etc/kamailio/kamailio-local.cfg
+elif [ "$SIP_SERVER_TYPE" = "ROUTER"]; then
+    echo '#!define ISNOT_SBC 1' > /etc/kamailio/kamailio-local.cfg
+    echo '#!define IS_ROUTER 1' > /etc/kamailio/kamailio-local.cfg
+fi
+  #statements
 echo '#!define LISTEN_XHTTP tcp:'$INTERFACE_XHTTP':'$XHTTP_PORT > /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_ROUTING_ENDPOINT "'$HTTP_API_ROUTING_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_CDR_ENDPOINT "'$HTTP_API_CDR_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
@@ -92,7 +108,7 @@ curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
     "Port": '$SIP_PORT',
     "Check": {
         "ID": "XHTTP",
-        "Name": "XHTTP API on port 8000",
+        "Name": "XHTTP API on port 9600",
         "DeregisterCriticalServiceAfter": "10m",
         "Method": "GET",
         "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
