@@ -4,4 +4,4 @@ dockerfile:
 
 .PHONY: dockerfile-sbc
 dockerfile-sbc:
-	docker build -t wazopbx/wazo-c4-sip-sbc:latest -f Dockerfile .
+	docker build -t wazopbx/wazo-c4-sip-sbc:latest -f Dockerfile-sbc .
