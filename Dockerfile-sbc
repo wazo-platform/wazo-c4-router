@@ -43,16 +43,16 @@ RUN curl -SLOk https://releases.hashicorp.com/consul-template/0.23.0/consul-temp
 
 RUN mkdir -p /etc/kamailio
 COPY kamailio/kamailio-local.cfg.example /etc/kamailio/kamailio-local.cfg.example
-COPY kamailio/kamailio-sbc.cfg /etc/kamailio/kamailio.cfg
+COPY kamailio/kamailio.cfg /etc/kamailio/kamailio.cfg
 COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
-COPY kamailio/xhttp.cfg /etc/kamailio/xhttp.cfg
+COPY kamailio/xhttp-sbc.cfg /etc/kamailio/xhttp.cfg
 COPY kamailio/dispatcher.list /etc/kamailio/dispatcher.list
 COPY kamailio/dbtext /etc/kamailio/dbtext
-COPY consul-templates-sbc/dispatcher-list.tpl /consul-templates-sbc/dispatcher-list.tpl
-COPY consul-templates-sbc/domain.tpl /consul-templates-sbc/domain.tpl
+COPY consul-templates/sbc/dispatcher-list.tpl /consul-templates/dispatcher-list.tpl
+COPY consul-templates/sbc/domain.tpl /consul-templates/domain.tpl
 COPY supervisord/supervisord-sbc.conf /etc/supervisor/conf.d/supervisord.conf
 
-ADD docker-entrypoint-sbc.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-CMD ["/docker-entrypoint.sh"]
+COPY docker-entrypoint-sbc.sh /docker-entrypoint-sbc.sh
+RUN chmod +x /docker-entrypoint-sbc.sh
+CMD ["/docker-entrypoint-sbc.sh"]

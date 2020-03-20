@@ -46,10 +46,11 @@ export KAMAILIO=$(which kamailio)
 # Kamailio-local.cfg
 mkdir -p /etc/kamailio/ /etc/kamailio/dbtext
 
-# If SBC Role
-echo '#!define IS_SBC' > /etc/kamailio/kamailio-local.cfg
+# IF ROUTER ROLE
+echo '#!define ISNOT_SBC' > /etc/kamailio/kamailio-local.cfg
+echo '#!define IS_ROUTER' > /etc/kamailio/kamailio-local.cfg
 
-#statements
+  #statements
 echo '#!define LISTEN_XHTTP tcp:'$INTERFACE_XHTTP':'$XHTTP_PORT > /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_ROUTING_ENDPOINT "'$HTTP_API_ROUTING_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_CDR_ENDPOINT "'$HTTP_API_CDR_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
@@ -100,8 +101,8 @@ $KAMAILIO -f $KAMAILIO_CONF -c
 # register/de-register service in consul
 curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
     "ID": "'$HOSTNAME'",
-    "Name": "sbc",
-    "Tags": ["sbc", "kamailio"],
+    "Name": "router",
+    "Tags": ["router", "kamailio", "'$DISPATCHER_ORDER'"],
     "Address": "'$SIP_IP'",
     "Port": '$SIP_PORT',
     "Check": {
@@ -112,6 +113,10 @@ curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
         "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
         "Timeout": "1s",
         "Interval": "10s"
+    },
+    "Weights": {
+      "Passing": '$DISPATCHER_WEIGHT',
+      "Warning": 1
     }
 }'
 

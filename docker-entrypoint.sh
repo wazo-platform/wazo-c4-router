@@ -45,6 +45,16 @@ export KAMAILIO=$(which kamailio)
 
 # Kamailio-local.cfg
 mkdir -p /etc/kamailio/ /etc/kamailio/dbtext
+if [ "$SIP_SERVER_TYPE" = "AIO"]; then
+    echo '#!define IS_AIO 1' > /etc/kamailio/kamailio-local.cfg
+    echo '#!define ISNOT_SBC 1' > /etc/kamailio/kamailio-local.cfg
+elif [ "$SIP_SERVER_TYPE" = "SBC"]; then
+    echo '#!define IS_SBC 1' > /etc/kamailio/kamailio-local.cfg
+elif [ "$SIP_SERVER_TYPE" = "ROUTER"]; then
+    echo '#!define ISNOT_SBC 1' > /etc/kamailio/kamailio-local.cfg
+    echo '#!define IS_ROUTER 1' > /etc/kamailio/kamailio-local.cfg
+fi
+  #statements
 echo '#!define LISTEN_XHTTP tcp:'$INTERFACE_XHTTP':'$XHTTP_PORT > /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_ROUTING_ENDPOINT "'$HTTP_API_ROUTING_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
 echo '#!define HTTP_API_CDR_ENDPOINT "'$HTTP_API_CDR_ENDPOINT'"' >> /etc/kamailio/kamailio-local.cfg
@@ -53,6 +63,9 @@ echo '#!define HTTP_API_TIMEOUT '$HTTP_API_TIMEOUT >> /etc/kamailio/kamailio-loc
 echo '#!define LISTEN '$LISTEN >> /etc/kamailio/kamailio-local.cfg
 if ! [ -z "$TESTING" ]; then
     echo '#!define TESTING 1' >> /etc/kamailio/kamailio-local.cfg
+fi
+if ! [ -z "$DISPATCHER_ALG" ]; then
+    echo '#!define DISPATCHER_ALG "'$DISPATCHER_ALG'"' >> /etc/kamailio/kamailio-local.cfg
 fi
 if ! [ -z "$HTTP_ASYNC_CLIENT_WORKERS" ]; then
     echo '#!define HTTP_ASYNC_CLIENT_WORKERS '$HTTP_ASYNC_CLIENT_WORKERS  >> /etc/kamailio/kamailio-local.cfg
@@ -69,12 +82,18 @@ if ! [ -z "$WITH_DMQ" ]; then
     echo '#!define DMQ_LISTEN '$DMQ_LISTEN >> /etc/kamailio/kamailio-local.cfg
     echo '#!define DMQ_SERVER_ADDRESS "sip:'$DMQ_IP':'$DMQ_PORT'"' >> /etc/kamailio/kamailio-local.cfg
     echo '#!define DMQ_NOTIFICATION_ADDRESS "'$DMQ_NOTIFICATION_ADDRESS'"' >> /etc/kamailio/kamailio-local.cfg
+    if ! [ -z "$DMQ_PING_INTERVAL" ]; then
+     echo '#!define DMQ_PING_INTERVAL "'$DMQ_PING_INTERVAL'"' >> /etc/kamailio/kamailio-local.cfg
+    fi
 fi
 if ! [ -z "$WITH_REDIS_DIALOG" ]; then
     echo '#!define WITH_REDIS_DIALOG 1' >> /etc/kamailio/kamailio-local.cfg
 fi
 if ! [ -z "$DBURL_DIALOG" ]; then
     echo '#!define DBURL_DIALOG "'$DBURL_DIALOG'"' >> /etc/kamailio/kamailio-local.cfg
+fi
+if ! [ -z "$NAT_PING_FROM" ]; then
+    echo '#!define NAT_PING_FROM "'$NAT_PING_FROM'"' >> /etc/kamailio/kamailio-local.cfg
 fi
 if ! [ -z "$ROUTER_AUTH_SECRET" ]; then
     echo '#!define ROUTER_AUTH_SECRET "'$ROUTER_AUTH_SECRET'"' >> /etc/kamailio/kamailio-local.cfg
@@ -84,26 +103,62 @@ fi
 $KAMAILIO -f $KAMAILIO_CONF -c
 
 # register/de-register service in consul
-curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
-    "ID": "'$HOSTNAME'",
-    "Name": "router",
-    "Tags": ["router", "kamailio", "'$DISPATCHER_ORDER'"],
-    "Address": "'$SIP_IP'",
-    "Port": '$SIP_PORT',
-    "Check": {
-        "ID": "XHTTP",
-        "Name": "XHTTP API on port 9600",
-        "DeregisterCriticalServiceAfter": "10m",
-        "Method": "GET",
-        "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
-        "Timeout": "1s",
-        "Interval": "10s"
-    },
-    "Weights": {
-      "Passing": '$DISPATCHER_WEIGHT',
-      "Warning": 1
-    }
-}'
+if [ "$SIP_SERVER_TYPE" = "ROUTER"]; then
+    curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
+        "ID": "'$HOSTNAME'",
+        "Name": "router",
+        "Tags": ["router", "kamailio", "'$DISPATCHER_ORDER'"],
+        "Address": "'$SIP_IP'",
+        "Port": '$SIP_PORT',
+        "Check": {
+            "ID": "XHTTP",
+            "Name": "XHTTP API on port 9600",
+            "DeregisterCriticalServiceAfter": "10m",
+            "Method": "GET",
+            "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
+            "Timeout": "1s",
+            "Interval": "10s"
+        },
+        "Weights": {
+          "Passing": '$DISPATCHER_WEIGHT',
+          "Warning": 1
+        }
+    }'
+elif [ "$SIP_SERVER_TYPE" = "SBC"]; then
+    curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
+        "ID": "'$HOSTNAME'",
+        "Name": "sbc",
+        "Tags": ["sbc", "kamailio"],
+        "Address": "'$SIP_IP'",
+        "Port": '$SIP_PORT',
+        "Check": {
+            "ID": "XHTTP",
+            "Name": "XHTTP API on port 9600",
+            "DeregisterCriticalServiceAfter": "10m",
+            "Method": "GET",
+            "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
+            "Timeout": "1s",
+            "Interval": "10s"
+        }
+    }'
+else
+    curl -i -X PUT http://${CONSUL_URI}/v1/agent/service/register -d '{
+        "ID": "'$HOSTNAME'",
+        "Name": "sbc-aio",
+        "Tags": ["sbc", "kamailio"],
+        "Address": "'$SIP_IP'",
+        "Port": '$SIP_PORT',
+        "Check": {
+            "ID": "XHTTP",
+            "Name": "XHTTP API on port 9600",
+            "DeregisterCriticalServiceAfter": "10m",
+            "Method": "GET",
+            "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
+            "Timeout": "1s",
+            "Interval": "10s"
+        }
+    }'
+fi
 exit_script() {
     curl -X PUT http://${CONSUL_URI}/v1/agent/service/deregister/$HOSTNAME
     [ -f /var/run/supervisor.sock ] && supervisorctl -c /etc/supervisor/conf.d/supervisord.conf shutdown
