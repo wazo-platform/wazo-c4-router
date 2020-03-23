@@ -5,8 +5,8 @@ ENV VERSION 1.0.0
 RUN apt-get update -qq && apt-get install -y --no-install-recommends gnupg2
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xfb40d3e6508ea4c8
 
-RUN echo "deb     http://deb.kamailio.org/kamailio53 buster main" >> /etc/apt/sources.list
-RUN echo "deb-src http://deb.kamailio.org/kamailio53 buster main" >> /etc/apt/sources.list
+RUN echo "deb     http://deb.kamailio.org/kamailio52 buster main" >> /etc/apt/sources.list
+RUN echo "deb-src http://deb.kamailio.org/kamailio52 buster main" >> /etc/apt/sources.list
 
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
 bash \
@@ -46,13 +46,13 @@ COPY kamailio/kamailio-local.cfg.example /etc/kamailio/kamailio-local.cfg.exampl
 COPY kamailio/kamailio-sbc.cfg /etc/kamailio/kamailio.cfg
 COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
-COPY kamailio/xhttp-sbc.cfg /etc/kamailio/xhttp.cfg
+COPY kamailio/xhttp-sbc.cfg /etc/kamailio/xhttp-sbc.cfg
 COPY kamailio/dispatcher.list /etc/kamailio/dispatcher.list
 COPY kamailio/dbtext /etc/kamailio/dbtext
-COPY consul-templates/sbc/dispatcher-list.tpl /consul-templates/dispatcher-list.tpl
-COPY consul-templates/sbc/domain.tpl /consul-templates/domain.tpl
+COPY consul-templates/sbc/dispatcher-list.tpl /consul-templates/sbc/dispatcher-list.tpl
+COPY consul-templates/sbc/domain.tpl /consul-templates/sbc/domain.tpl
 COPY supervisord/supervisord-sbc.conf /etc/supervisor/conf.d/supervisord.conf
 
-COPY docker-entrypoint-sbc.sh /docker-entrypoint-sbc.sh
-RUN chmod +x /docker-entrypoint-sbc.sh
-CMD ["/docker-entrypoint-sbc.sh"]
+COPY docker-entrypoint-sbc.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+CMD ["/docker-entrypoint.sh"]
