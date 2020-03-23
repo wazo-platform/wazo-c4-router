@@ -22,3 +22,12 @@ Homepage: https://www.wazo-platform.org
 Description: Kamailio configuration files for Wazo C4 SBC component
  Wazo is a system based on a powerful IPBX, to bring an easy to
  install solution for telephony and related services.
+
+Package: wazo-c4-aio
+Architecture: all
+Section: comm
+Depends: kamailio, kamailio-json-modules, ${misc:Depends}
+Homepage: https://www.wazo-platform.org
+Description: Kamailio configuration files for Wazo C4 SBC component
+ Wazo is a system based on a powerful IPBX, to bring an easy to
+ install solution for telephony and related services.
