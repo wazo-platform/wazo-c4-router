@@ -1,8 +1,8 @@
-kamailio/kamailio.cfg usr/share/wazo-c4-router
+kamailio/kamailio-router.cfg usr/share/wazo-c4-router
 kamailio/kamailio-local.cfg.example usr/share/wazo-c4-router
 kamailio/routing.cfg usr/share/wazo-c4-router
 kamailio/cdrs.cfg usr/share/wazo-c4-router
-kamailio/xhttp.cfg usr/share/wazo-c4-router
+kamailio/xhttp-router.cfg usr/share/wazo-c4-router
 kamailio/dbtext/domain usr/share/wazo-c4-router/dbtext
 kamailio/dbtext/domain_attrs usr/share/wazo-c4-router/dbtext
 kamailio/dbtext/rtpengine usr/share/wazo-c4-router/dbtext

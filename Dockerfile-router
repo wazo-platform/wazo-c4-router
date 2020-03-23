@@ -5,8 +5,8 @@ ENV VERSION 1.0.0
 RUN apt-get update -qq && apt-get install -y --no-install-recommends gnupg2
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xfb40d3e6508ea4c8
 
-RUN echo "deb     http://deb.kamailio.org/kamailio53 buster main" >> /etc/apt/sources.list
-RUN echo "deb-src http://deb.kamailio.org/kamailio53 buster main" >> /etc/apt/sources.list
+RUN echo "deb     http://deb.kamailio.org/kamailio52 buster main" >> /etc/apt/sources.list
+RUN echo "deb-src http://deb.kamailio.org/kamailio52 buster main" >> /etc/apt/sources.list
 
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
 bash \
@@ -43,14 +43,16 @@ RUN curl -SLOk https://releases.hashicorp.com/consul-template/0.23.0/consul-temp
 
 RUN mkdir -p /etc/kamailio
 COPY kamailio/kamailio-local.cfg.example /etc/kamailio/kamailio-local.cfg.example
-COPY kamailio/kamailio.cfg /etc/kamailio/kamailio.cfg
+COPY kamailio/kamailio-router.cfg /etc/kamailio/kamailio.cfg
 COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
-COPY kamailio/xhttp.cfg /etc/kamailio/xhttp.cfg
+COPY kamailio/xhttp-router.cfg /etc/kamailio/xhttp-router.cfg
+COPY kamailio/dispatcher.list /etc/kamailio/dispatcher.list
 COPY kamailio/dbtext /etc/kamailio/dbtext
-COPY consul-templates /consul-templates
-COPY supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY consul-templates/router/domain.tpl /consul-templates/router/domain.tpl
+COPY consul-templates/router/rtp.tpl /consul-templates/router/rtp.tpl
+COPY supervisord/supervisord-router.conf /etc/supervisor/conf.d/supervisord.conf
 
-ADD docker-entrypoint.sh /docker-entrypoint.sh
+COPY docker-entrypoint-router.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 CMD ["/docker-entrypoint.sh"]
