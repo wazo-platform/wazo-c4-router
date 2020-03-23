@@ -4,8 +4,8 @@ wazo-c4-router (1.0.1) wazo-dev-buster; urgency=medium
 
  -- Wazo Maintainers <dev+pkg@wazo.community>  Tue, 23 Oct 2018 10:52:32 -0400
 
- wazo-c4-sbc (1.0.1) wazo-dev-buster; urgency=medium
+wazo-c4-sbc (1.0.1) wazo-dev-buster; urgency=medium
 
-   * First package
+ * First package
 
-  -- Wazo Maintainers <dev+pkg@wazo.community>  Tue, 30 Oct 2019 10:52:32 -0400
+-- Wazo Maintainers <dev+pkg@wazo.community>  Tue, 30 Oct 2019 10:52:32 -0400
