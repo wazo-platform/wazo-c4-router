@@ -48,10 +48,10 @@ COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
 COPY kamailio/xhttp-router.cfg /etc/kamailio/xhttp-router.cfg
 COPY kamailio/dbtext /etc/kamailio/dbtext
-COPY consul-templates/router/domain.tpl /consul-templates/router/domain.tpl
+COPY consul-templates/sbc/domain.tpl /consul-templates/sbc/domain.tpl
 COPY consul-templates/router/rtp.tpl /consul-templates/router/rtp.tpl
-COPY supervisord/supervisord-router.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord/supervisord-aio.conf /etc/supervisor/conf.d/supervisord.conf
 
-COPY docker-entrypoint-router.sh /docker-entrypoint.sh
+COPY docker-entrypoint-aio.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 CMD ["/docker-entrypoint.sh"]
