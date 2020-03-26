@@ -1,12 +1,11 @@
-all: dockerfile-sbc dockerfile-router
+ACTION = build --no-cache
 
-dockerfile-sbc:
-	docker build --no-cache -t wazopbx/wazo-c4-sbc:latest -f Dockerfile-sbc .
+all: sbc router
 
-dockerfile-router:
-	docker build --no-cache -t wazopbx/wazo-c4-router:latest -f Dockerfile-router .
+sbc:
+	docker $(ACTION) -t wazopbx/wazo-c4-sbc:latest -f Dockerfile-sbc .
 
-dockerfile-aio:
-	docker build --no-cache -t wazopbx/wazo-c4-aio:latest -f Dockerfile-aio .
+router:
+	docker $(ACTION) -t wazopbx/wazo-c4-router:latest -f Dockerfile-router .
 
-.PHONY: dockerfile-sbc dockerfile-router dockerfile-aio
+.PHONY: sbc router
