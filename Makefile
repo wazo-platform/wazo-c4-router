@@ -1,12 +1,16 @@
-ACTION = build --no-cache -t
+BUILD = build --no-cache
 BUILD_PATH = .
 
 all: sbc router
 
 sbc:
-	docker $(ACTION) wazopbx/wazo-c4-sbc -f Dockerfile-sbc $(BUILD_PATH)
+	docker $(BUILD) -t wazopbx/wazo-c4-sbc -f Dockerfile-sbc $(BUILD_PATH)
 
 router:
-	docker $(ACTION) wazopbx/wazo-c4-router -f Dockerfile-router $(BUILD_PATH)
+	docker $(BUILD) -t wazopbx/wazo-c4-router -f Dockerfile-router $(BUILD_PATH)
 
-.PHONY: sbc router
+push:
+	docker push wazopbx/wazo-c4-sbc
+	docker push wazopbx/wazo-c4-router
+
+.PHONY: sbc router push
