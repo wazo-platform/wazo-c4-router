@@ -1,0 +1,10 @@
+kamailio/kamailio-aio.cfg usr/share/wazo-c4-sbc
+kamailio/kamailio-local.cfg.example usr/share/wazo-c4-aio
+kamailio/routing.cfg usr/share/wazo-c4-aio
+kamailio/cdrs.cfg usr/share/wazo-c4-aio
+kamailio/xhttp-aio.cfg usr/share/wazo-c4-aio
+kamailio/dbtext/domain usr/share/wazo-c4-aio/dbtext
+kamailio/dbtext/domain_attrs usr/share/wazo-c4-aio/dbtext
+kamailio/dbtext/rtpengine usr/share/wazo-c4-aio/dbtext
+kamailio/dbtext/uacreg usr/share/wazo-c4-aio/dbtext
+kamailio/dbtext/version usr/share/wazo-c4-aio/dbtext
