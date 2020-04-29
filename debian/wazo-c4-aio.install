@@ -1,4 +1,4 @@
-kamailio/kamailio-aio.cfg usr/share/wazo-c4-sbc
+kamailio/kamailio-aio.cfg usr/share/wazo-c4-aio/kamailio.cfg
 kamailio/kamailio-local.cfg.example usr/share/wazo-c4-aio
 kamailio/routing.cfg usr/share/wazo-c4-aio
 kamailio/cdrs.cfg usr/share/wazo-c4-aio
