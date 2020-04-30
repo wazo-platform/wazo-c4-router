@@ -37,7 +37,7 @@ DMQ_IP=$(ip -o -4 a | awk '$2 == "'$INTERFACE_DMQ'" { gsub(/\/.*/, "", $4); prin
 XHTTP_IP=$(ip -o -4 a | awk '$2 == "'$INTERFACE_XHTTP'" { gsub(/\/.*/, "", $4); print $4 }')
 
 if [ -z "$XHTTP_PORT" ]; then
-    XHTTP_PORT="9600"
+    XHTTP_PORT="9601"
 fi
 
 HOSTNAME=$(hostname)
