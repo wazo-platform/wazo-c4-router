@@ -46,7 +46,7 @@ COPY kamailio/kamailio-local.cfg.example /etc/kamailio/kamailio-local.cfg.exampl
 COPY kamailio/kamailio-aio.cfg /etc/kamailio/kamailio.cfg
 COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
-COPY kamailio/xhttp-router.cfg /etc/kamailio/xhttp-router.cfg
+COPY kamailio/xhttp-aio.cfg /etc/kamailio/xhttp-aio.cfg
 COPY kamailio/dbtext /etc/kamailio/dbtext
 COPY consul-templates/sbc/domain.tpl /consul-templates/sbc/domain.tpl
 COPY consul-templates/router/rtp.tpl /consul-templates/router/rtp.tpl
