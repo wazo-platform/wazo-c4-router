@@ -37,7 +37,7 @@ DMQ_IP=$(ip -o -4 a | awk '$2 == "'$INTERFACE_DMQ'" { gsub(/\/.*/, "", $4); prin
 XHTTP_IP=$(ip -o -4 a | awk '$2 == "'$INTERFACE_XHTTP'" { gsub(/\/.*/, "", $4); print $4 }')
 
 if [ -z "$XHTTP_PORT" ]; then
-    XHTTP_PORT="9600"
+    XHTTP_PORT="9601"
 fi
 
 HOSTNAME=$(hostname)
@@ -112,7 +112,7 @@ if [ "$SIP_SERVER_TYPE" = "ROUTER"]; then
         "Port": '$SIP_PORT',
         "Check": {
             "ID": "XHTTP",
-            "Name": "XHTTP API on port 9600",
+            "Name": "XHTTP API on port 9601",
             "DeregisterCriticalServiceAfter": "10m",
             "Method": "GET",
             "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
@@ -133,7 +133,7 @@ elif [ "$SIP_SERVER_TYPE" = "SBC"]; then
         "Port": '$SIP_PORT',
         "Check": {
             "ID": "XHTTP",
-            "Name": "XHTTP API on port 9600",
+            "Name": "XHTTP API on port 9601",
             "DeregisterCriticalServiceAfter": "10m",
             "Method": "GET",
             "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",
@@ -150,7 +150,7 @@ else
         "Port": '$SIP_PORT',
         "Check": {
             "ID": "XHTTP",
-            "Name": "XHTTP API on port 9600",
+            "Name": "XHTTP API on port 9601",
             "DeregisterCriticalServiceAfter": "10m",
             "Method": "GET",
             "HTTP": "http://'$XHTTP_IP':'$XHTTP_PORT'/status",

@@ -5,8 +5,8 @@ ENV VERSION 1.0.0
 RUN apt-get update -qq && apt-get install -y --no-install-recommends gnupg2
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xfb40d3e6508ea4c8
 
-RUN echo "deb     http://deb.kamailio.org/kamailio52 buster main" >> /etc/apt/sources.list
-RUN echo "deb-src http://deb.kamailio.org/kamailio52 buster main" >> /etc/apt/sources.list
+RUN echo "deb     http://deb.kamailio.org/kamailio53 buster main" >> /etc/apt/sources.list
+RUN echo "deb-src http://deb.kamailio.org/kamailio53 buster main" >> /etc/apt/sources.list
 
 RUN apt-get update -qq && apt-get install -y --no-install-recommends \
 bash \
@@ -46,7 +46,7 @@ COPY kamailio/kamailio-local.cfg.example /etc/kamailio/kamailio-local.cfg.exampl
 COPY kamailio/kamailio-aio.cfg /etc/kamailio/kamailio.cfg
 COPY kamailio/routing.cfg /etc/kamailio/routing.cfg
 COPY kamailio/cdrs.cfg /etc/kamailio/cdrs.cfg
-COPY kamailio/xhttp-router.cfg /etc/kamailio/xhttp-router.cfg
+COPY kamailio/xhttp-aio.cfg /etc/kamailio/xhttp-aio.cfg
 COPY kamailio/dbtext /etc/kamailio/dbtext
 COPY consul-templates/sbc/domain.tpl /consul-templates/sbc/domain.tpl
 COPY consul-templates/router/rtp.tpl /consul-templates/router/rtp.tpl

@@ -1,6 +1,6 @@
 # wazo-c4-router docker
 
-wazo-c4-router provides docker containers for SIP proxy components of the Wazo C4 infrastructure.
+wazo-c4-router provides docker containers for SIP proxy components of the Wazo infrastructure.
 
 ## Building a new container
 
